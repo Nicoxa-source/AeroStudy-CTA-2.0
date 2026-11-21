@@ -1,0 +1,22 @@
+{
+  "_nota": "Los estacionamientos y hangares disponibles se derivan de taxiway-routes.json (miembros de cada grupo) y de locations.json. Este archivo solo define cómo se nombran y qué casos están pendientes.",
+  "standSpokenPrefix": "estacionamiento",
+  "pendingConfirmation": {
+    "42": { "enabled": false, "nota": "Pendiente: ¿«41 y 41» incluye el 42? Para habilitarlo cambie enabled a true y confirme la ruta en taxiway-routes.json (pending.42)." },
+    "15": { "enabled": false, "nota": "Pendiente: ruta de salida no definida por el propietario." }
+  },
+  "planoNoEtiquetados": {
+    "_nota": "Estacionamientos incluidos por el anexo (8–14, 16–25, 26–32) cuyo número no aparece rotulado en el plano adjunto. Se generan igualmente porque el anexo los incluye; se listan para que el propietario los verifique.",
+    "values": ["13", "28", "29"]
+  },
+  "arrivalDestinations": {
+    "_nota": "Destinos de rodaje en llegadas. Solo hangares y plataformas (anexo §2). Los estacionamientos numerados no se usan como destino de llegada porque el material no define su fraseología.",
+    "includeNumberedStands": false,
+    "militaryAircraftOnlyTo": ["MIL"],
+    "civilAircraftNeverTo": ["MIL"]
+  },
+  "departureParking": {
+    "militaryAircraftOnlyFrom": ["MIL"],
+    "civilAircraftNeverFrom": ["MIL"]
+  }
+}

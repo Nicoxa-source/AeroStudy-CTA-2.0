@@ -1,0 +1,27 @@
+{
+  "_nota": "Rangos académicos aprobados (anexo §6). NO son límites operacionales oficiales. Las condiciones se generan una vez por ejercicio y no cambian durante la operación.",
+  "windDirection": { "min": 120, "max": 220, "step": 10 },
+  "windSpeedKt":   { "min": 0,   "max": 15, "calmProbability": 0.08 },
+  "qnh":           { "min": 1005, "max": 1025 },
+  "temperatureC":  { "min": 5,   "max": 35 },
+  "utc": { "format": "HH:MM" },
+  "coherence": {
+    "_nota": "Coherencia simple: temperatura según hora local aproximada (UTC-3). De noche tiende a valores más bajos; de día, a más altos. Sigue dentro del rango aprobado.",
+    "localOffsetHours": -3,
+    "night": { "fromLocalHour": 0, "toLocalHour": 7,  "min": 5,  "max": 20 },
+    "day":   { "fromLocalHour": 12, "toLocalHour": 18, "min": 18, "max": 35 },
+    "other": { "min": 10, "max": 30 }
+  },
+  "transponder": {
+    "digitMin": 0,
+    "digitMax": 7,
+    "length": 4,
+    "mode": "generate",
+    "bank": [],
+    "_notaBank": "Si mode es «bank» y la lista no está vacía, solo se usan estos códigos.",
+    "excludedCodes": ["0000", "1000", "1200", "2000", "7000", "7500", "7600", "7700", "7777"],
+    "excludedFirstDigits": [7],
+    "_notaExcluded": "Se excluyen códigos de emergencia/especiales (7500, 7600, 7700), VFR/conspicuidad (1200, 7000), 0000 y todo el bloque 7xxx."
+  },
+  "militaryTransponder": "institutional"
+}

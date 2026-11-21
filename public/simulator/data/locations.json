@@ -1,0 +1,18 @@
+{
+  "_nota": "Catálogo de ubicaciones de SCEL (anexo §2). Los códigos son internos: nunca se exigen en fraseología. Correcciones del propietario: CDA (no CDL), LIT (no LI). Los alias están normalizados (minúsculas, sin tildes) y sirven para reconocer el destino en la transcripción.",
+  "locations": [
+    { "code": "MIL", "name": "Plataforma Militar",                 "spoken": "Plataforma Militar",          "taxiName": "Militar",              "kind": "military", "aliases": ["plataforma militar", "militar"] },
+    { "code": "ENA", "name": "Hangar ENAER",                       "spoken": "Hangar ENAER",                "taxiName": "ENAER",                "kind": "hangar",   "aliases": ["enaer", "hangar enaer"] },
+    { "code": "CED", "name": "Hangar Los Cedros",                  "spoken": "Hangar Los Cedros",           "taxiName": "Los Cedros",           "kind": "hangar",   "aliases": ["los cedros", "cedros"] },
+    { "code": "STA", "name": "Hangar Santa María",                 "spoken": "Hangar Santa María",          "taxiName": "Santa María",          "kind": "hangar",   "aliases": ["santa maria"] },
+    { "code": "LIT", "name": "Hangar Litoral",                     "spoken": "Hangar Litoral",              "taxiName": "Litoral",              "kind": "hangar",   "aliases": ["litoral"] },
+    { "code": "NES", "name": "Hangar Aeronest",                    "spoken": "Hangar Aeronest",             "taxiName": "Aeronest",             "kind": "hangar",   "aliases": ["aeronest", "aero nest"] },
+    { "code": "SGO", "name": "Hangar FBO Santiago",                "spoken": "Hangar FBO Santiago",         "taxiName": "FBO Santiago",         "kind": "hangar",   "aliases": ["fbo santiago", "fbo"] },
+    { "code": "INS", "name": "Hangar Inspección en Vuelo (DGAC)",  "spoken": "Hangar Inspección en Vuelo",  "taxiName": "Inspección en Vuelo",  "kind": "hangar",   "aliases": ["inspeccion en vuelo", "inspeccion en vuelo dgac"] },
+    { "code": "LAN", "name": "Mantenimiento LAN",                  "spoken": "Mantenimiento LAN",           "taxiName": "Mantenimiento LAN",    "kind": "hangar",   "aliases": ["mantenimiento lan"] },
+    { "code": "S",   "name": "Plataforma Sierra",                  "spoken": "Plataforma Sierra",           "taxiName": "Sierra",               "kind": "platform", "aliases": ["plataforma sierra", "sierra"] },
+    { "code": "AVI", "name": "Hangar Aviasur",                     "spoken": "Hangar Aviasur",              "taxiName": "Aviasur",              "kind": "hangar",   "aliases": ["aviasur", "avia sur"] },
+    { "code": "CDA", "name": "Hangar Aerocardal",                  "spoken": "Hangar Aerocardal",           "taxiName": "Aerocardal",           "kind": "hangar",   "aliases": ["aerocardal", "aero cardal"] },
+    { "code": "SKY", "name": "SKY",                                "spoken": "SKY",                         "taxiName": "SKY",                  "kind": "platform", "aliases": ["sky"] }
+  ]
+}

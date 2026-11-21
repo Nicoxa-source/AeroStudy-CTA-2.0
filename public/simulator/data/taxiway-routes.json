@@ -1,0 +1,20 @@
+{
+  "_nota": "Banco definitivo de rutas de rodaje de SALIDA hacia el punto de espera 17L (anexo §3). Evaluación estricta: orden exacto, cualquiera de las alternativas. NO se invierten para obtener rutas de llegada. Estacionamientos 15 y 42 están pendientes de confirmación y no se generan (ver parking-positions.json).",
+  "groups": [
+    { "id": "MIL",     "members": ["MIL"],                                   "routes": [["D","A"]] },
+    { "id": "HANG_A",  "members": ["ENA","CED","STA"],                       "routes": [["K","T","A"]] },
+    { "id": "HANG_B",  "members": ["LIT","NES","SGO","INS"],                 "routes": [["K","J","A"], ["K","T","A"]] },
+    { "id": "HANG_C",  "members": ["LAN","S","SKY","CDA"],                   "routes": [["M","K","J","A"], ["M","K","T","A"]] },
+    { "id": "AVI",     "members": ["AVI"],                                   "routes": [["I","M","K","J","A"], ["I","M","K","T","A"]] },
+    { "id": "ST_8_14", "members": ["8","9","10","11","12","13","14"],        "routes": [["Q","G","C","A"], ["Q","H","A"]] },
+    { "id": "ST_16_25","members": ["16","17","18","19","20","21","22","23","24","25"], "routes": [["G","C","A"], ["G","K","H","A"]] },
+    { "id": "ST_26_32","members": ["26","27","28","29","30","31","32"],      "routes": [["K","F","A"]] },
+    { "id": "ST_33_37","members": ["33","34","35","36A","36B","37"],         "routes": [["K","B","A"]] },
+    { "id": "ST_38_40","members": ["38","39","40"],                          "routes": [["K","E","A"]] },
+    { "id": "ST_41",   "members": ["41"],                                    "routes": [["K","N","A"]] }
+  ],
+  "pending": {
+    "42": { "candidateRoutes": [["K","N","A"]], "enabled": false, "nota": "El propietario escribió «41 y 41»; confirmar si incluye el 42." },
+    "15": { "candidateRoutes": [],              "enabled": false, "nota": "El estacionamiento 15 no tiene ruta definida; no se generan salidas desde él." }
+  }
+}

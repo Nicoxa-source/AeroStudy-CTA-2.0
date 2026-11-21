@@ -1,0 +1,685 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#08172c"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><title>AeroStudy CTA · Identificación de aeronaves</title><style>:root{color-scheme:dark;--bg:#0c1120;--panel:#161f31;--line:#324057;--muted:#9caac0;--accent:#5aabfb;--good:#42d39d;--bad:#fa8585}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:radial-gradient(ellipse at top,#182642 0%,#0c1120 62%);color:#eef4ff;min-height:100vh}.shell{max-width:890px;margin:auto;padding:24px 15px 50px}header{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:15px 4px 22px}h1{font-size:clamp(25px,4vw,36px);line-height:1.12;margin:8px 0}header p{margin:0;color:var(--muted)}.eyebrow{font-size:12px;letter-spacing:.22em;font-weight:800;color:var(--accent)}.back{display:inline-block;color:#b8dafa;text-decoration:none;margin-bottom:20px}.plane{font-size:52px;color:var(--accent)}.settings{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px 15px}.settings label{color:var(--muted);font-size:14px}.settings select{background:#101a2b;color:white;border:1px solid var(--line);padding:11px;border-radius:9px;flex:1;max-width:190px}.settings button{margin-left:auto}.status{display:flex;justify-content:space-between;gap:10px;margin:20px 0 9px;font-size:14px;color:#ceddf3}.progressbar{height:6px;background:#27344b;border-radius:10px;margin-bottom:18px;overflow:hidden}#progressfill{height:100%;width:0;background:var(--accent);transition:width .2s}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:clamp(15px,4vw,25px);box-shadow:0 20px 50px #0002}.photohead{display:flex;justify-content:space-between;margin-bottom:13px;font-weight:700}.subtle{color:var(--muted);font-size:13px;font-weight:400}.imgbox{background:#0c1525;border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:180px}.imgbox img{display:block;width:100%;max-height:440px;object-fit:contain}form{display:flex;flex-direction:column;gap:7px;padding-top:20px}form label{font-size:14px;font-weight:700;margin-top:11px}input{width:100%;background:#0d1727;color:#f1f5ff;border:1px solid #41536c;border-radius:10px;padding:13px 14px;font-size:16px}input:focus{outline:2px solid var(--accent);outline-offset:1px}input.correct{border-color:var(--good)}input.wrong{border-color:var(--bad)}button{background:#348ae8;color:#fff;border:0;border-radius:10px;padding:12px 16px;font-size:15px;font-weight:750;cursor:pointer}button:hover{filter:brightness(1.11)}button.secondary{background:#293a55;color:#eff5ff;border:1px solid #465a77}button:disabled{opacity:.5;cursor:default}.actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}.actions button{flex:1;min-width:155px}#feedback{margin-top:18px;border:1px solid var(--line);background:#101a2b;border-radius:10px;padding:15px}#feedback h2{margin:0 0 13px;font-size:18px}.answerline{margin:10px 0}.answerline b{display:block;margin-bottom:2px}.answerline .good{color:var(--good)}.answerline .bad{color:var(--bad)}#next{width:100%;margin-top:15px}.end{text-align:center}.end h2{margin-top:4px}footer{font-size:12px;color:var(--muted);text-align:center;padding:22px 5px}@media(max-width:520px){.plane{display:none}.settings{flex-wrap:wrap}.settings button{width:100%}.settings select{max-width:none}}
+</style></head><body>
+<main class="shell">
+<header><div><a class="back" href="index.html">← Volver a AeroStudy</a><div class="eyebrow">AEROSTUDY CTA</div><h1>Identificación de aeronaves</h1><p>Reconoce la aeronave por su fotografía. Sin pistas.</p></div><span class="plane">✈</span></header>
+<section class="settings" aria-label="Configuración de ronda"><label for="mode">Modo</label><select id="mode"><option value="study">Estudio</option><option value="exam">Examen</option></select><button id="newRound" type="button" class="secondary">↻ Nueva ronda</button></section>
+<section class="status"><span id="progress">Aeronave 1 / 53</span><span id="score">0 / 0 campos correctos</span></section><div class="progressbar"><div id="progressfill"></div></div>
+<section class="card" id="quiz"><div class="photohead"><span id="questionNo">Pregunta 1</span><span class="subtle">Observa la fotografía</span></div><div class="imgbox"><img id="aircraftImage" alt="Fotografía de una aeronave para identificar"></div><form id="answerForm" autocomplete="off"><label for="name">Nombre de la aeronave</label><input id="name" placeholder="Escribe fabricante y modelo" spellcheck="false" required><label for="code">Código OACI</label><input id="code" placeholder="Ej. A320" spellcheck="false" required><label for="description">Descripción de aeronave</label><input id="description" placeholder="Ej. L2J/M" spellcheck="false" required><div class="actions"><button type="submit" id="check">Comprobar respuestas</button><button type="button" id="reveal" class="secondary">Ver respuesta</button></div></form><div id="feedback" aria-live="polite" hidden></div><button type="button" id="next" hidden>Siguiente aeronave →</button></section>
+<section class="card end" id="end" hidden><h2>¡Ronda terminada!</h2><p id="results"></p><button type="button" id="restart">Comenzar nueva ronda ↻</button></section>
+<footer>Banco construido desde PER 4.pptx · Una aparición por modelo en cada ronda · Las fotografías cambian entre rondas cuando existen alternativas.</footer>
+</main><script>// Datos extraídos de PER 4.pptx; tres versiones Boeing 787 separadas.
+window.AEROSTUDY_AIRCRAFT = [
+  {
+    "id": "SH36",
+    "name": "SHORT 360",
+    "code": "SH36",
+    "description": "L2T/M",
+    "photos": [
+      "identificacion-assets/s01_01.webp",
+      "identificacion-assets/s01_02.webp",
+      "identificacion-assets/s01_03.webp"
+    ],
+    "slide": 1
+  },
+  {
+    "id": "A119",
+    "name": "AGUSTA 119 KOALA",
+    "code": "A119",
+    "description": "H1T/L",
+    "photos": [
+      "identificacion-assets/s02_01.webp",
+      "identificacion-assets/s02_02.webp",
+      "identificacion-assets/s02_03.webp"
+    ],
+    "slide": 2
+  },
+  {
+    "id": "A109",
+    "name": "AGUSTA 109 AW109",
+    "code": "A109",
+    "description": "H2T/L",
+    "photos": [
+      "identificacion-assets/s03_01.webp",
+      "identificacion-assets/s03_02.webp",
+      "identificacion-assets/s03_03.webp",
+      "identificacion-assets/s03_04.webp"
+    ],
+    "slide": 3
+  },
+  {
+    "id": "A332",
+    "name": "AIRBUS 330-200",
+    "code": "A332",
+    "description": "L2J/H",
+    "photos": [
+      "identificacion-assets/s04_01.webp",
+      "identificacion-assets/s04_02.webp",
+      "identificacion-assets/s04_03.webp",
+      "identificacion-assets/s04_04.webp"
+    ],
+    "slide": 4
+  },
+  {
+    "id": "A333",
+    "name": "AIRBUS A-330-300",
+    "code": "A333",
+    "description": "L2J/H",
+    "photos": [
+      "identificacion-assets/s05_01.webp",
+      "identificacion-assets/s05_02.webp",
+      "identificacion-assets/s05_03.webp",
+      "identificacion-assets/s05_04.webp"
+    ],
+    "slide": 5
+  },
+  {
+    "id": "A345",
+    "name": "AIRBUS A-340-500",
+    "code": "A345",
+    "description": "L4J/H",
+    "photos": [
+      "identificacion-assets/s06_01.webp",
+      "identificacion-assets/s06_02.webp",
+      "identificacion-assets/s06_03.webp"
+    ],
+    "slide": 6
+  },
+  {
+    "id": "A20N",
+    "name": "AIRBUS 320 NEO",
+    "code": "A20N",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s07_01.webp",
+      "identificacion-assets/s07_02.webp"
+    ],
+    "slide": 7
+  },
+  {
+    "id": "A21N",
+    "name": "AIRBUS A321 NEO",
+    "code": "A21N",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s08_01.webp",
+      "identificacion-assets/s08_02.webp"
+    ],
+    "slide": 8
+  },
+  {
+    "id": "A388",
+    "name": "AIRBUS A380-800",
+    "code": "A388",
+    "description": "L4J/H",
+    "photos": [
+      "identificacion-assets/s09_01.webp",
+      "identificacion-assets/s09_02.webp",
+      "identificacion-assets/s09_03.webp"
+    ],
+    "slide": 9
+  },
+  {
+    "id": "AN12",
+    "name": "ANTONOV AN-12",
+    "code": "AN12",
+    "description": "L4T/M",
+    "photos": [
+      "identificacion-assets/s10_01.webp",
+      "identificacion-assets/s10_02.webp",
+      "identificacion-assets/s10_03.webp"
+    ],
+    "slide": 10
+  },
+  {
+    "id": "AN26",
+    "name": "ANTONOV AN-26",
+    "code": "AN26",
+    "description": "L2T/M",
+    "photos": [
+      "identificacion-assets/s11_01.webp",
+      "identificacion-assets/s11_02.webp",
+      "identificacion-assets/s11_03.webp"
+    ],
+    "slide": 11
+  },
+  {
+    "id": "A124",
+    "name": "ANTONOV AN-124",
+    "code": "A124",
+    "description": "L4J/H",
+    "photos": [
+      "identificacion-assets/s12_01.webp",
+      "identificacion-assets/s12_02.webp",
+      "identificacion-assets/s12_03.webp",
+      "identificacion-assets/s12_04.webp"
+    ],
+    "slide": 12
+  },
+  {
+    "id": "AT45",
+    "name": "ATR 42-500",
+    "code": "AT45",
+    "description": "L2T/M",
+    "photos": [
+      "identificacion-assets/s13_01.webp",
+      "identificacion-assets/s13_02.webp",
+      "identificacion-assets/s13_03.webp"
+    ],
+    "slide": 13
+  },
+  {
+    "id": "RJ85",
+    "name": "AVRO AVROLINER",
+    "code": "RJ85",
+    "description": "L4J/M",
+    "photos": [
+      "identificacion-assets/s14_01.webp",
+      "identificacion-assets/s14_02.webp"
+    ],
+    "slide": 14
+  },
+  {
+    "id": "B350",
+    "name": "BEECHCRAFT KING AIR 350",
+    "code": "B350",
+    "description": "L2T/M",
+    "photos": [
+      "identificacion-assets/s15_01.webp",
+      "identificacion-assets/s15_02.webp",
+      "identificacion-assets/s15_03.webp"
+    ],
+    "slide": 15
+  },
+  {
+    "id": "BE9L",
+    "name": "BEECHCRAFT KING AIR 90",
+    "code": "BE9L",
+    "description": "L2T/L",
+    "photos": [
+      "identificacion-assets/s16_01.webp",
+      "identificacion-assets/s16_02.webp"
+    ],
+    "slide": 16
+  },
+  {
+    "id": "BE36",
+    "name": "BEECHCRAFT BONANZA G36",
+    "code": "BE36",
+    "description": "L1P/L",
+    "photos": [
+      "identificacion-assets/s17_01.webp",
+      "identificacion-assets/s17_02.webp",
+      "identificacion-assets/s17_03.webp",
+      "identificacion-assets/s17_04.webp"
+    ],
+    "slide": 17
+  },
+  {
+    "id": "BE58",
+    "name": "BEECHCRAFT 58 BARON",
+    "code": "BE58",
+    "description": "L2P/L",
+    "photos": [
+      "identificacion-assets/s18_01.webp",
+      "identificacion-assets/s18_02.webp"
+    ],
+    "slide": 18
+  },
+  {
+    "id": "BE35",
+    "name": "BEECHCRAFT 35 BONANZA",
+    "code": "BE35",
+    "description": "L1P/L",
+    "photos": [
+      "identificacion-assets/s19_01.webp",
+      "identificacion-assets/s19_02.webp",
+      "identificacion-assets/s19_03.webp"
+    ],
+    "slide": 19
+  },
+  {
+    "id": "B190",
+    "name": "BEECHCRAFT 1900",
+    "code": "B190",
+    "description": "L2T/M",
+    "photos": [
+      "identificacion-assets/s20_01.webp",
+      "identificacion-assets/s20_02.webp",
+      "identificacion-assets/s20_03.webp",
+      "identificacion-assets/s20_04.webp"
+    ],
+    "slide": 20
+  },
+  {
+    "id": "B06",
+    "name": "BELL 206-A-JET RANGER",
+    "code": "B06",
+    "description": "H1T/L",
+    "photos": [
+      "identificacion-assets/s21_01.webp",
+      "identificacion-assets/s21_02.webp",
+      "identificacion-assets/s21_03.webp"
+    ],
+    "slide": 21
+  },
+  {
+    "id": "B407",
+    "name": "BELL 407",
+    "code": "B407",
+    "description": "H1T/L",
+    "photos": [
+      "identificacion-assets/s22_01.webp",
+      "identificacion-assets/s22_02.webp",
+      "identificacion-assets/s22_03.webp",
+      "identificacion-assets/s22_04.webp"
+    ],
+    "slide": 22
+  },
+  {
+    "id": "UH1",
+    "name": "BELL IROQUOIS-UH1H",
+    "code": "UH1",
+    "description": "H1T/L",
+    "photos": [
+      "identificacion-assets/s23_01.webp",
+      "identificacion-assets/s23_02.webp",
+      "identificacion-assets/s23_03.webp"
+    ],
+    "slide": 23
+  },
+  {
+    "id": "B735",
+    "name": "BOEING 737-500",
+    "code": "B735",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s24_01.webp",
+      "identificacion-assets/s24_02.webp",
+      "identificacion-assets/s24_03.webp"
+    ],
+    "slide": 24
+  },
+  {
+    "id": "B737",
+    "name": "BOEING 737-700",
+    "code": "B737",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s25_01.webp",
+      "identificacion-assets/s25_02.webp",
+      "identificacion-assets/s25_03.webp",
+      "identificacion-assets/s25_04.webp"
+    ],
+    "slide": 25
+  },
+  {
+    "id": "B738",
+    "name": "BOEING 737-800",
+    "code": "B738",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s26_01.webp",
+      "identificacion-assets/s26_02.webp",
+      "identificacion-assets/s26_03.webp"
+    ],
+    "slide": 26
+  },
+  {
+    "id": "B752",
+    "name": "BOEING 757-200",
+    "code": "B752",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s27_01.webp",
+      "identificacion-assets/s27_02.webp",
+      "identificacion-assets/s27_03.webp",
+      "identificacion-assets/s27_04.webp"
+    ],
+    "slide": 27
+  },
+  {
+    "id": "B763",
+    "name": "BOEING 767-300",
+    "code": "B763",
+    "description": "L2J/H",
+    "photos": [
+      "identificacion-assets/s28_01.webp",
+      "identificacion-assets/s28_02.webp",
+      "identificacion-assets/s28_03.webp",
+      "identificacion-assets/s28_04.webp"
+    ],
+    "slide": 28
+  },
+  {
+    "id": "B744",
+    "name": "BOEING 747-400",
+    "code": "B744",
+    "description": "L4J/H",
+    "photos": [
+      "identificacion-assets/s29_01.webp",
+      "identificacion-assets/s29_02.webp",
+      "identificacion-assets/s29_03.webp",
+      "identificacion-assets/s29_04.webp"
+    ],
+    "slide": 29
+  },
+  {
+    "id": "B77W",
+    "name": "BOEING 777-300_ER",
+    "code": "B77W",
+    "description": "L2J/H",
+    "photos": [
+      "identificacion-assets/s30_01.webp",
+      "identificacion-assets/s30_02.webp",
+      "identificacion-assets/s30_03.webp",
+      "identificacion-assets/s30_04.webp"
+    ],
+    "slide": 30
+  },
+  {
+    "id": "B788",
+    "name": "BOEING 787-8 DREAMLINER",
+    "code": "B788",
+    "description": "L2J/H",
+    "photos": [
+      "identificacion-assets/s31_01.webp",
+      "identificacion-assets/s31_02.webp",
+      "identificacion-assets/s31_03.webp",
+      "identificacion-assets/s31_04.webp",
+      "identificacion-assets/dreamliner_B788.webp"
+    ],
+    "slide": 31
+  },
+  {
+    "id": "MD83",
+    "name": "MC DONNELL DOUGLAS 83",
+    "code": "MD83",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s33_01.webp",
+      "identificacion-assets/s33_02.webp",
+      "identificacion-assets/s33_03.webp"
+    ],
+    "slide": 33
+  },
+  {
+    "id": "MD11",
+    "name": "MC DONNELL DOUGLAS MD11",
+    "code": "MD11",
+    "description": "L3J/H",
+    "photos": [
+      "identificacion-assets/s34_01.webp",
+      "identificacion-assets/s34_02.webp",
+      "identificacion-assets/s34_03.webp",
+      "identificacion-assets/s34_04.webp"
+    ],
+    "slide": 34
+  },
+  {
+    "id": "GLEX",
+    "name": "BOMBARDIER Global Express",
+    "code": "GLEX",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s35_01.webp",
+      "identificacion-assets/s35_02.webp",
+      "identificacion-assets/s35_03.webp",
+      "identificacion-assets/s35_04.webp"
+    ],
+    "slide": 35
+  },
+  {
+    "id": "CL2T",
+    "name": "CANADAIR CL-215T",
+    "code": "CL2T",
+    "description": "A2T/M",
+    "photos": [
+      "identificacion-assets/s36_01.webp",
+      "identificacion-assets/s36_02.webp",
+      "identificacion-assets/s36_03.webp",
+      "identificacion-assets/s36_04.webp"
+    ],
+    "slide": 36
+  },
+  {
+    "id": "CL60",
+    "name": "CANADAIR Challenger 600",
+    "code": "CL60",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s37_01.webp",
+      "identificacion-assets/s37_02.webp",
+      "identificacion-assets/s37_03.webp",
+      "identificacion-assets/s37_04.webp"
+    ],
+    "slide": 37
+  },
+  {
+    "id": "CRJ9",
+    "name": "CANADAIR Regional Jet CRJ-900",
+    "code": "CRJ9",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s38_01.webp",
+      "identificacion-assets/s38_02.webp",
+      "identificacion-assets/s38_03.webp"
+    ],
+    "slide": 38
+  },
+  {
+    "id": "C303",
+    "name": "CESSNA Crusader",
+    "code": "C303",
+    "description": "L2P/L",
+    "photos": [
+      "identificacion-assets/s39_01.webp",
+      "identificacion-assets/s39_02.webp",
+      "identificacion-assets/s39_03.webp"
+    ],
+    "slide": 39
+  },
+  {
+    "id": "FA50",
+    "name": "DASSAULT Falcon 50",
+    "code": "FA50",
+    "description": "L3J/M",
+    "photos": [
+      "identificacion-assets/s40_01.webp",
+      "identificacion-assets/s40_02.webp",
+      "identificacion-assets/s40_03.webp",
+      "identificacion-assets/s40_04.webp"
+    ],
+    "slide": 40
+  },
+  {
+    "id": "F900",
+    "name": "DASSAULT Falcon 900",
+    "code": "F900",
+    "description": "L3J/M",
+    "photos": [
+      "identificacion-assets/s41_01.webp",
+      "identificacion-assets/s41_02.webp",
+      "identificacion-assets/s41_03.webp",
+      "identificacion-assets/s41_04.webp"
+    ],
+    "slide": 41
+  },
+  {
+    "id": "SW4",
+    "name": "FAIRCHILD DORNIER 227 Metro",
+    "code": "SW4",
+    "description": "L2T/M",
+    "photos": [
+      "identificacion-assets/s42_01.webp",
+      "identificacion-assets/s42_02.webp",
+      "identificacion-assets/s42_03.webp"
+    ],
+    "slide": 42
+  },
+  {
+    "id": "GLF3",
+    "name": "Gulfstream 3",
+    "code": "GLF3",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s43_01.webp",
+      "identificacion-assets/s43_02.webp",
+      "identificacion-assets/s43_03.webp"
+    ],
+    "slide": 43
+  },
+  {
+    "id": "H25B",
+    "name": "BEECHCRAFT Hawker 850",
+    "code": "H25B",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s44_01.webp",
+      "identificacion-assets/s44_02.webp",
+      "identificacion-assets/s44_03.webp"
+    ],
+    "slide": 44
+  },
+  {
+    "id": "IL76",
+    "name": "ILYUSHIN IL-76",
+    "code": "IL76",
+    "description": "L4J/H",
+    "photos": [
+      "identificacion-assets/s45_01.webp",
+      "identificacion-assets/s45_02.webp",
+      "identificacion-assets/s45_03.webp"
+    ],
+    "slide": 45
+  },
+  {
+    "id": "LJ45",
+    "name": "LEARJET 45",
+    "code": "LJ45",
+    "description": "L2J/M",
+    "photos": [
+      "identificacion-assets/s46_01.webp",
+      "identificacion-assets/s46_02.webp",
+      "identificacion-assets/s46_03.webp",
+      "identificacion-assets/s46_04.webp"
+    ],
+    "slide": 46
+  },
+  {
+    "id": "P28A",
+    "name": "PIPER Cherokee Archer",
+    "code": "P28A",
+    "description": "L1P/L",
+    "photos": [
+      "identificacion-assets/s47_01.webp",
+      "identificacion-assets/s47_02.webp",
+      "identificacion-assets/s47_03.webp"
+    ],
+    "slide": 47
+  },
+  {
+    "id": "PA31",
+    "name": "PIPER Navajo Chieftain",
+    "code": "PA31",
+    "description": "L2P/L",
+    "photos": [
+      "identificacion-assets/s48_01.webp",
+      "identificacion-assets/s48_02.webp"
+    ],
+    "slide": 48
+  },
+  {
+    "id": "PA34",
+    "name": "PIPER Seneca",
+    "code": "PA34",
+    "description": "L2P/L",
+    "photos": [
+      "identificacion-assets/s49_01.webp",
+      "identificacion-assets/s49_02.webp",
+      "identificacion-assets/s49_03.webp"
+    ],
+    "slide": 49
+  },
+  {
+    "id": "PA44",
+    "name": "PIPER Seminole",
+    "code": "PA44",
+    "description": "L2P/L",
+    "photos": [
+      "identificacion-assets/s50_01.webp",
+      "identificacion-assets/s50_02.webp",
+      "identificacion-assets/s50_03.webp"
+    ],
+    "slide": 50
+  },
+  {
+    "id": "PC12",
+    "name": "PILATUS PC-12",
+    "code": "PC12",
+    "description": "L1T/L",
+    "photos": [
+      "identificacion-assets/s51_01.webp",
+      "identificacion-assets/s51_02.webp",
+      "identificacion-assets/s51_03.webp"
+    ],
+    "slide": 51
+  },
+  {
+    "id": "SC7",
+    "name": "SHORT Skyliner",
+    "code": "SC7",
+    "description": "L2T/L",
+    "photos": [
+      "identificacion-assets/s52_01.webp",
+      "identificacion-assets/s52_02.webp"
+    ],
+    "slide": 52
+  },
+  {
+    "id": "B789",
+    "name": "BOEING 787-9 DREAMLINER",
+    "code": "B789",
+    "description": "L2J/H",
+    "photos": [
+      "identificacion-assets/dreamliner_B789.webp"
+    ],
+    "slide": 32
+  },
+  {
+    "id": "B78X",
+    "name": "BOEING 787-10 DREAMLINER",
+    "code": "B78X",
+    "description": "L2J/H",
+    "photos": [
+      "identificacion-assets/dreamliner_B78X.webp"
+    ],
+    "slide": 32
+  }
+];
+</script><script>(()=>{
+'use strict';
+const all = window.AEROSTUDY_AIRCRAFT;
+if(!Array.isArray(all)||!all.length){alert('No se pudo cargar aircraft-data.js');return;}
+const $=id=>document.getElementById(id);
+const shuffle=items=>{const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+const normalizeName=s=>normalize(s).replace(/^MC?DONNELLDOUGLAS/,'MCDONNELLDOUGLAS');
+// Each plane's photos are placed in a shuffled cycle; use every photo before repeating.
+const photoBags=new Map();let deck=[],index=0,points=0,fieldsTotal=0,answered=false,mode='study';
+function choosePhoto(aircraft){let bag=photoBags.get(aircraft.id)||[];if(!bag.length){bag=shuffle(aircraft.photos);const prev=photoBags.get('last:'+aircraft.id);if(bag.length>1&&bag[0]===prev){[bag[0],bag[1]]=[bag[1],bag[0]];}}const photo=bag.shift();photoBags.set(aircraft.id,bag);photoBags.set('last:'+aircraft.id,photo);return photo;}
+const namesAllowed=aircraft=>{const name=normalizeName(aircraft.name);let candidates=[name];const noHyphen=aircraft.name.replace(/-/g,' ');candidates.push(normalizeName(noHyphen));
+// Abbreviations of manufacturer are accepted only if full model remains identified.
+if(name.startsWith('BOEING'))candidates.push(name.replace(/^BOEING/,'B'));
+if(name.startsWith('AIRBUS'))candidates.push(name.replace(/^AIRBUS/,'A'));
+return candidates;};
+function current(){return deck[index];}
+function newRound(){mode=$('mode').value;deck=shuffle(all).map(a=>({...a,activePhoto:choosePhoto(a)}));index=0;points=0;fieldsTotal=0;$('end').hidden=true;$('quiz').hidden=false;show();}
+function show(){if(index>=deck.length){finish();return;}const a=current();answered=false;$('answerForm').reset();for(const id of ['name','code','description']){$(id).disabled=false;$(id).className='';} $('answerForm').hidden=false;$('feedback').hidden=true;$('feedback').innerHTML='';$('next').hidden=true;$('check').disabled=false;$('reveal').hidden=(mode==='exam');$('aircraftImage').src=a.activePhoto;$('aircraftImage').alt='Fotografía de aeronave sin identificar';$('progress').textContent=`Aeronave ${index+1} / ${deck.length}`;$('questionNo').textContent=`Pregunta ${index+1}`;$('score').textContent=`${points} / ${fieldsTotal} campos correctos`;$('progressfill').style.width=(index/deck.length*100)+'%';}
+function displayFeedback(revealOnly=false){if(answered)return;answered=true;const a=current();const inputs=[['Nombre',$('name'),a.name,namesAllowed(a).includes(normalizeName($('name').value))],['Código OACI',$('code'),a.code,normalize($('code').value)===normalize(a.code)],['Descripción',$('description'),a.description,normalize($('description').value)===normalize(a.description)]];let html=`<h2>${revealOnly?'Respuesta revelada':'Corrección individual'}</h2>`;for(const [label,input,answer,ok] of inputs){if(!revealOnly){fieldsTotal++;if(ok)points++;input.className=ok?'correct':'wrong';}input.disabled=true;const span=document.createElement('span');span.textContent=answer;html+=`<div class="answerline"><b>${label}</b><span class="${!revealOnly&&ok?'good':!revealOnly?'bad':''}">${revealOnly?'Respuesta: ':ok?'✓ Correcto: ':'✕ Incorrecto. Correcto: '}${span.innerHTML||escapeHTML(answer)}</span></div>`;}
+$('feedback').innerHTML=html;$('feedback').hidden=false;$('next').hidden=false;$('check').disabled=true;$('reveal').hidden=true;$('score').textContent=`${points} / ${fieldsTotal} campos correctos`;$('next').textContent=index===deck.length-1?'Ver resultados →':'Siguiente aeronave →';}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function finish(){$('quiz').hidden=true;$('end').hidden=false;$('progressfill').style.width='100%';$('progress').textContent=`Ronda completa: ${deck.length} aeronaves`;$('results').textContent=`${points} de ${fieldsTotal} campos correctos. En cada nueva ronda se mezclan las aeronaves y alternan las fotografías disponibles.`;}
+$('answerForm').addEventListener('submit',e=>{e.preventDefault();displayFeedback(false);});$('reveal').addEventListener('click',()=>displayFeedback(true));$('next').addEventListener('click',()=>{index++;show();});$('restart').addEventListener('click',newRound);$('newRound').addEventListener('click',()=>{if(index===0||confirm('¿Reiniciar la ronda? Se perderá el resultado actual.'))newRound();});$('mode').addEventListener('change',newRound);
+newRound();
+})();
+</script><script>if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});</script></body></html>

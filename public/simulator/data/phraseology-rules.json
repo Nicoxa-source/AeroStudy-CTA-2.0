@@ -1,0 +1,44 @@
+{
+  "_nota": "Fraseología académica (COMUNICACIONES ISM.docx + anexo). Modificable sin tocar el motor. La confirmación militar («tres verdes») está PENDIENTE de confirmación por el propietario: edite «military» para ajustarla.",
+  "airport": "SCEL",
+  "runway": { "id": "17L", "spoken": "17 izquierda", "number": "17", "side": "left" },
+  "dependencies": {
+    "torre":     { "spoken": "Santiago Torre" },
+    "terrestre": { "spoken": "Control Terrestre" }
+  },
+  "frequencies": {
+    "tower":  { "display": "118,1", "digits": "1181" },
+    "ground": { "display": "122,2", "digits": "1222" }
+  },
+  "taxiwaysForRunwayExit": ["D", "C", "B", "A"],
+  "militaryTransponderSpoken": "institucional",
+  "military": {
+    "gearInstruction": "tren abajo y asegurado",
+    "pilotConfirmation": "recibido, en {phase} tres verdes",
+    "phaseLabels": { "base": "básico", "final": "final" },
+    "_pendiente": "Redacción exacta pendiente de confirmar por el propietario (anexo §5). Para aproximación directa (final) se asume «en final tres verdes»: supuesto de entrenamiento documentado."
+  },
+  "pilot": {
+    "contactTower":        "Santiago Torre, {cs}.",
+    "contactGround":       "Control Terrestre, {cs}.",
+    "arrivalRequest":      "{cs}, {aircraft}, procedente de {origin}, sobre {point}, instrucciones.",
+    "entryReadback":       "{cs}, recibido, ingreso {maneuver}, pista 17 izquierda, QNH {qnh}, notificaré {report}.",
+    "report":              "{cs}, notifico {report}.",
+    "reportThenAskedBase": "{cs}, recibido, en básico.",
+    "landingReadback":     "{cs}, recibido, pista 17 izquierda, autorizado para aterrizar.",
+    "vacateReadback":      "{cs}, recibido, abandono por vía {street}, abandonando pista contacto Control Terrestre, frecuencia {freq}.",
+    "groundArrivalRequest":"{cs}, en calle de rodaje {street}, solicito rodaje a {dest}.",
+    "groundArrivalReadback":"{cs}, recibido, ruedo a plataforma {dest}, vía {route}.",
+    "parked":              "{cs}, estacionado en {dest}.",
+    "departureRequest":    "{cs}, {aircraft}, activando plan de vuelo visual hacia {destination}, estacionado en {parking}, solicito rodaje.",
+    "departureReadback":   "{cs}, recibido, ruedo a punto de espera pista 17 izquierda, vía {route}, condiciones copiadas, QNH {qnh}, activo transpondedor {xpdr}.",
+    "transferReadback":    "{cs}, recibido, cuando listo contactaré Santiago Torre, frecuencia {freq}.",
+    "readyForDeparture":   "Santiago Torre, {cs}, listo a salir."
+  },
+  "events": {
+    "landed":        "La aeronave aterriza y se dispone a abandonar la pista.",
+    "taxiProgress":  "Se observa el avance del rodaje.",
+    "taxiArrival":   "La aeronave completa el rodaje hacia su destino."
+  },
+  "disclaimer": "Simulador de entrenamiento académico. No utilizar para operaciones aeronáuticas reales."
+}

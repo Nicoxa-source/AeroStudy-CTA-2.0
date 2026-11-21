@@ -1,0 +1,35 @@
+{
+  "_nota": "Puntos visuales, ingresos permitidos y notificaciones válidas (anexo §5, prompt §11). Solo se aceptan las maniobras listadas para cada punto. Maipú es la única excepción con dos ingresos.",
+  "maneuvers": {
+    "left_base":      { "label": "básico izquierdo",                          "family": "base",     "side": "left"  },
+    "right_base":     { "label": "básico derecho",                            "family": "base",     "side": "right" },
+    "left_downwind":  { "label": "tramo a favor del viento izquierdo",        "family": "downwind", "side": "left"  },
+    "right_downwind": { "label": "tramo a favor del viento derecho",          "family": "downwind", "side": "right" },
+    "straight_in":    { "label": "aproximación directa",                      "family": "straight", "side": null    }
+  },
+  "validReports": {
+    "left_base":      ["base"],
+    "right_base":     ["base"],
+    "left_downwind":  ["downwind", "base"],
+    "right_downwind": ["downwind", "base"],
+    "straight_in":    ["short_final", "long_final"]
+  },
+  "reportLabels": {
+    "base": "básico",
+    "downwind": "tramo a favor del viento",
+    "short_final": "final corto",
+    "long_final": "final largo"
+  },
+  "points": [
+    { "id": "renca",        "name": "Renca",         "entries": ["left_base"] },
+    { "id": "pan_azucar",   "name": "Pan de Azúcar", "entries": ["left_base"] },
+    { "id": "lampa",        "name": "Lampa",         "entries": ["right_base"] },
+    { "id": "lo_castro",    "name": "Lo Castro",     "entries": ["straight_in"] },
+    { "id": "colina",       "name": "Colina",        "entries": ["straight_in"] },
+    { "id": "bicentenario", "name": "Bicentenario",  "entries": ["left_downwind"] },
+    { "id": "san_cristobal","name": "San Cristóbal", "entries": ["left_downwind"] },
+    { "id": "lo_prado",     "name": "Lo Prado",      "entries": ["right_downwind"] },
+    { "id": "laguna_caren", "name": "Laguna Carén",  "entries": ["right_downwind"] },
+    { "id": "maipu",        "name": "Maipú",         "entries": ["left_downwind", "right_downwind"] }
+  ]
+}

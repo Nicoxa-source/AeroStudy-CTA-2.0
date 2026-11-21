@@ -1,0 +1,37 @@
+{
+  "_nota": "Selección de aeronaves y aeródromos de las bases existentes de AeroStudy CTA (shared-db.json, generado desde public/index.html). Solo se referencian registros existentes por su código OACI; no se inventan modelos ni aeródromos. Las listas son configurables.",
+  "categories": {
+    "light":      { "codes": ["C172", "C150", "P28A", "BE36", "BE35"],                  "military": false, "maxTier": 2 },
+    "twin":       { "codes": ["BE58", "PA34", "PA44", "C303", "C337", "C402", "PA31"], "military": false, "maxTier": 2 },
+    "turboprop":  { "codes": ["C208", "PC12", "BE9L", "BE20", "B350"],                 "military": false, "maxTier": 3 },
+    "helicopter": { "codes": ["R44", "R22", "B06", "B407", "AS50", "EC35"],            "military": false, "maxTier": 1 },
+    "military":   { "codes": ["F5", "F16", "C130", "H60", "UH1", "C295", "CN35", "C101"], "military": true, "maxTier": 1 }
+  },
+  "categoryWeights": { "light": 4, "twin": 2, "turboprop": 1, "helicopter": 1, "military": 1.5 },
+  "labels": {
+    "C172": "Cessna 172", "C150": "Cessna 150", "P28A": "Piper Cherokee Archer", "BE36": "Bonanza G36", "BE35": "Bonanza 35",
+    "BE58": "Baron 58", "PA34": "Piper Seneca", "PA44": "Piper Seminole", "C303": "Cessna Crusader", "C337": "Cessna 337",
+    "C402": "Cessna 402", "PA31": "Piper Navajo", "C208": "Cessna Caravan", "PC12": "Pilatus PC-12", "BE9L": "King Air 90",
+    "BE20": "King Air 250", "B350": "King Air 350", "R44": "Robinson R44", "R22": "Robinson R22", "B06": "Bell 206",
+    "B407": "Bell 407", "AS50": "Ecureuil H-125", "EC35": "H-135", "F5": "F-5 Tiger", "F16": "F-16", "C130": "Hércules C-130",
+    "H60": "Black Hawk", "UH1": "Bell UH-1 Iroquois", "C295": "C-295", "CN35": "CN-235", "C101": "Halcón C-101"
+  },
+  "civilCallsign": { "prefix": "CC", "lettersLength": 3, "_nota": "Matrículas ficticias CC-xxx. Se aceptan la forma completa (CC-ABC) y la abreviada con las tres últimas letras (ABC), como en el ejemplo del anexo («ACV, en Charlie…»)." },
+  "militaryCallsigns": {
+    "_nota": "Distintivos tácticos FICTICIOS para entrenamiento (palabra + número). No corresponden a unidades reales.",
+    "words": ["Halcón", "Cóndor", "Pegaso", "Águila", "Cometa", "Fénix"],
+    "numberMin": 11,
+    "numberMax": 89
+  },
+  "aerodromes": {
+    "_nota": "Procedencia/destino plausibles para vuelos VFR. Tier 1: zona central cercana a Santiago (apta para todas las aeronaves). Tier 2: aeródromos más lejanos de la zona central (solo ala fija). Tier 3: aeródromos internacionales cercanos a Chile central, solo turbohélices. Los códigos deben existir en shared-db.json.",
+    "spokenOverrides": {
+      "SCTB": "Tobalaba", "SCLC": "Vitacura", "SCHC": "Chicureo", "SCVH": "La Victoria de Chacabuco", "SCBQ": "El Bosque",
+      "SCME": "Los Cuatro Diablos", "SCMP": "Melipilla", "SCTS": "Santa Teresa del Almendral", "SCRL": "La Estrella", "SCRP": "Rapelhuapi"
+    },
+    "tier1": ["SCRG", "SCTB", "SCCV", "SCSN", "SCVM", "SCTW", "SCAN", "SCQL", "SCSF", "SCKL", "SCME", "SCMP", "SCTS", "SCAU", "SCHC", "SCVH", "SCLC", "SCEG", "SCER", "SCRD"],
+    "tier2": ["SCSD", "SCUZ", "SCPM", "SCRL", "SCRP", "SCLQ", "SCIC", "SCTL", "SCDI", "SCQT", "SCCT", "SCLI"],
+    "tier3International": ["SAME", "SANU"],
+    "militaryExtra": ["SCBQ", "SCER"]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "appId": "cl.aerostudy.cta",
+  "appName": "AeroStudy CTA",
+  "webDir": "public",
+  "server": { "androidScheme": "https" },
+  "android": { "allowMixedContent": false }
+}
