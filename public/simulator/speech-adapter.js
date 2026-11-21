@@ -20,7 +20,7 @@ export function detectEngine(win = globalThis) {
   return 'none';
 }
 
-export function createSpeechAdapter(win = globalThis, { lang = 'es-CL' } = {}) {
+export function createSpeechAdapter(win = globalThis, { lang = 'es-CL', capWaitMs = 1800, capStartMs = 2500 } = {}) {
   const kind = detectEngine(win);
   let session = null;
 
@@ -80,21 +80,43 @@ export function createSpeechAdapter(win = globalThis, { lang = 'es-CL' } = {}) {
   }
 
   // ---------- Plugin Capacitor
-  async function startCap() {
+  // Android: stop() puede no resolver su promesa (incidencia upstream #127).
+  // No depender de esa promesa, y mantener el listener activo durante el cierre.
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  function fire(fn) { try { Promise.resolve(fn()).catch(() => {}); } catch { /* bridge */ } }
+  function cleanupCap(s) {
+    s.closed = true;
+    if (s.handle) fire(() => s.handle.remove());
+  }
+  function startCap() {
     const p = win.Capacitor.Plugins.SpeechRecognition;
-    const s = { p, latest: '', handle: null, error: null };
-    try {
-      s.handle = await p.addListener?.('partialResults', (e) => { s.latest = e?.matches?.[0] ?? s.latest; });
-      await p.start({ language: lang, maxResults: 1, partialResults: true, popup: false });
-    } catch (e) { s.error = e?.message ?? 'start-failed'; }
+    const s = { p, latest: '', handle: null, error: null, closed: false, started: false };
+    s.ready = (async () => {
+      try {
+        s.handle = await p.addListener('partialResults', e => {
+          if (!s.closed && e?.matches?.[0]) s.latest = e.matches[0];
+        });
+        if (s.closed) { fire(() => s.handle.remove()); return; }
+        const r = await p.start({ language: lang, maxResults: 1, partialResults: true, popup: false });
+        if (!s.closed) {
+          s.started = true;
+          if (r?.matches?.[0]) s.latest = r.matches[0];
+        }
+      } catch (e) { s.error = e?.message ?? 'start-failed'; }
+    })();
     return s;
   }
 
   async function stopCap(s) {
-    try { await s.p.stop?.(); } catch { /* ignorar */ }
-    try { await s.handle?.remove?.(); } catch { /* ignorar */ }
+    await Promise.race([s.ready, delay(capStartMs)]);
+    if (s.closed) return { transcript: '', error: 'cancelled' };
+    // El bridge nativo puede detener el micrófono sin resolver stop().
+    fire(() => s.p.stop());
+    await delay(capWaitMs);
     const text = (s.latest ?? '').trim();
-    if (!text) return { transcript: '', error: s.error ?? 'no-speech' };
+    cleanupCap(s);
+    if (s.error) return { transcript: '', error: s.error };
+    if (!text) return { transcript: '', error: s.started ? 'no-speech' : 'speech-timeout' };
     return { transcript: text };
   }
 
@@ -109,16 +131,15 @@ export function createSpeechAdapter(win = globalThis, { lang = 'es-CL' } = {}) {
     },
     async stop() {
       if (!session) return { transcript: '', error: 'not-started' };
-      const s = await session; // Capacitor devuelve una promesa
-      session = null;
-      return kind === 'webspeech' ? stopWeb(s) : stopCap(s);
+      const s = session;
+      try { return await (kind === 'webspeech' ? stopWeb(s) : stopCap(s)); }
+      finally { if (session === s) session = null; }
     },
     cancel() {
       const s = session; session = null;
-      Promise.resolve(s).then((x) => {
-        if (!x) return;
-        try { if (kind === 'webspeech') x.rec.abort(); else x.p.stop?.(); } catch { /* ignorar */ }
-      });
+      if (!s) return;
+      if (kind === 'webspeech') { try { s.rec.abort(); } catch {} }
+      else { cleanupCap(s); fire(() => s.p.stop()); }
     },
   };
 }
@@ -132,6 +153,7 @@ export function describeSpeechError(code) {
     case 'language-not-supported': return 'El idioma español no está disponible en el motor de voz de este dispositivo.';
     case 'no-speech': case 'empty-transcript': return 'No se detectó voz. Mantén presionado, habla con claridad y suelta al terminar.';
     case 'low-confidence': return 'El reconocimiento no tuvo suficiente confianza. Repite la transmisión.';
+    case 'speech-timeout': return 'El motor de voz no respondió. Repite la transmisión; si persiste, reinicia el simulador.';
     case 'too-short': return 'Mantén presionado mientras hablas.';
     default: return 'No se pudo procesar la transmisión. Intenta de nuevo.';
   }

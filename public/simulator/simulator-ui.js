@@ -198,7 +198,17 @@ async function release() {
   if (pttState !== 'recording') return;
   const held = performance.now() - pressAt;
   pttState = 'processing'; sim.endAttempt(); paintPtt();
-  const res = await speech.stop();
+  const activeSim = sim;
+  const activeTurn = turnAtPress;
+  let res;
+  let watchdog;
+  try {
+    res = await Promise.race([speech.stop(), new Promise(resolve => {
+      watchdog = setTimeout(() => { speech.cancel(); resolve({ transcript: '', error: 'speech-timeout' }); }, 5000);
+    })]);
+  } catch { res = { transcript: '', error: 'speech-timeout' }; }
+  finally { clearTimeout(watchdog); }
+  if (sim !== activeSim || pttState !== 'processing' || sim.getView()?.status !== 'running' || sim.getView()?.turn?.id !== activeTurn) return;
   if (held < 350) { sim.cancelAttempt(); pttState = 'idle'; notice = describeSpeechError('too-short'); renderExercise(); return; }
   const out = sim.submit(res.transcript, { error: res.error, confidence: res.confidence }, turnAtPress);
   pttState = 'idle';

@@ -1,5 +1,5 @@
 // Generado por scripts/build-sw.mjs — no editar a mano.
-const VERSION = 'aerostudy-2d76f70ecb';
+const VERSION = 'aerostudy-91ca37f26f';
 const CORE = [
  "./",
  "icons/apple-touch-icon.png",

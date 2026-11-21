@@ -74,3 +74,18 @@ test('service worker y páginas sin referencias obsoletas (aero-login, Netlify I
     assert.ok(!/aero-login|netlify-identity|netlifyIdentity|identity\.netlify/i.test(t), f);
   }
 });
+
+test('Android: stop y remove sin resolución no bloquean y se conserva resultado tardío', async () => {
+  let cb, removed = false;
+  const never = () => new Promise(() => {});
+  const plugin = { addListener: async (_, f) => { cb=f; return {remove: () => { removed=true; return never(); }}; }, start: async () => {}, stop: () => { setTimeout(() => cb({matches:['comunicacion completa']}), 5); return never(); } };
+  const a = createSpeechAdapter({ Capacitor: {isNativePlatform:()=>true, Plugins:{SpeechRecognition:plugin}} }, {capWaitMs:25,capStartMs:25});
+  a.start(); assert.equal((await a.stop()).transcript,'comunicacion completa'); assert.ok(removed);
+});
+
+test('Android: start sin resolución devuelve error técnico y permite nuevo intento', async () => {
+  let cb, count=0;
+  const plugin = { addListener: async (_, f) => { cb=f; return {remove: async()=>{}}; }, start: () => ++count===1 ? new Promise(()=>{}) : Promise.resolve(), stop: () => { if(count===2) cb({matches:['recibido']}); return new Promise(()=>{}); } };
+  const a = createSpeechAdapter({ Capacitor: {isNativePlatform:()=>true, Plugins:{SpeechRecognition:plugin}} }, {capWaitMs:15,capStartMs:15});
+  a.start(); assert.equal((await a.stop()).error,'speech-timeout'); a.start(); assert.equal((await a.stop()).transcript,'recibido');
+});
